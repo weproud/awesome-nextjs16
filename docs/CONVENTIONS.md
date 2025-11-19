@@ -1,6 +1,6 @@
 # Project Conventions
 
-This document outlines the coding conventions and architectural decisions for the **MadeInStock** project. Following these guidelines ensures consistency, maintainability, and scalability.
+This document outlines the coding conventions and architectural decisions for the **Awesome nextjs 16** project. Following these guidelines ensures consistency, maintainability, and scalability.
 
 ## 1. Project Structure
 

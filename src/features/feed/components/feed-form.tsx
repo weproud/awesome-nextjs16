@@ -13,6 +13,7 @@ interface FeedFormProps {
         id: string;
         title: string;
         content: string;
+        contentHtml: string;
     };
 }
 
@@ -20,6 +21,7 @@ export function FeedForm({ initialData }: FeedFormProps) {
     const router = useRouter();
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
+    const [contentHtml, setContentHtml] = useState(initialData?.contentHtml || "");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -29,10 +31,10 @@ export function FeedForm({ initialData }: FeedFormProps) {
         setIsLoading(true);
         try {
             if (initialData) {
-                await updatePost(initialData.id, { title, content });
+                await updatePost(initialData.id, { title, content, contentHtml });
                 router.push(`/feed/${initialData.id}`);
             } else {
-                await createPost({ title, content });
+                await createPost({ title, content, contentHtml });
                 router.push("/feed");
             }
             router.refresh();
@@ -55,7 +57,14 @@ export function FeedForm({ initialData }: FeedFormProps) {
                 />
             </div>
             <div className="space-y-2">
-                <TiptapEditor content={content} onChange={setContent} editable={!isLoading} />
+                <TiptapEditor
+                    content={contentHtml || content} // Use HTML if available, fallback to text/markdown
+                    onChange={({ html, text }) => {
+                        setContentHtml(html);
+                        setContent(text);
+                    }}
+                    editable={!isLoading}
+                />
             </div>
             <div className="flex justify-end gap-4">
                 <Button

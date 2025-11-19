@@ -33,7 +33,7 @@ export function FeedCard({ post }: FeedCardProps) {
                         </h3>
                         <div
                             className="text-sm text-muted-foreground line-clamp-2 prose prose-sm dark:prose-invert max-w-none"
-                            dangerouslySetInnerHTML={{ __html: post.content }}
+                            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
                         />
                     </Link>
                 </div>

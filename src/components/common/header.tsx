@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/common/mode-toggle";
+import { Navigation } from "@/components/common/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { UserMenu } from "@/features/auth/components/user-menu";
@@ -13,14 +14,7 @@ export async function Header() {
           MadeInStock
         </Link>
         <div className="flex items-center gap-4">
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium hover:underline"
-            >
-              Dashboard
-            </Link>
-          </nav>
+          <Navigation />
           <div className="flex items-center gap-2">
             {session?.user ? (
               <UserMenu user={session.user} />

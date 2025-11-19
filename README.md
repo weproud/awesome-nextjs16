@@ -1,5 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+> [!TIP]
+> Please refer to [docs/CONVENTIONS.md](docs/CONVENTIONS.md) for project coding standards and architectural guidelines.
+
 ## Getting Started
 
 First, run the development server:

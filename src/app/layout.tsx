@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "@/lib/providers";
 
 export const metadata: Metadata = {
-  title: "MadeInStock",
+  title: "Awesome nextjs 15",
   description: "Stock information service",
 };
 

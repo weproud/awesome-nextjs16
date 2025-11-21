@@ -15,6 +15,7 @@ import Link from "next/link";
 import { deletePost } from "../actions";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { createColumns, createIdColumn, ColumnMetadata } from "@/features/admin/lib/column-builder";
 
 export type PostColumn = {
     id: string;
@@ -28,44 +29,37 @@ export type PostColumn = {
     updatedAt: Date;
 };
 
-export const columns: ColumnDef<PostColumn>[] = [
-    {
-        accessorKey: "id",
-        header: "ID",
-        cell: ({ row }) => <span className="font-mono text-xs">{row.original.id.slice(0, 8)}...</span>,
-    },
+const postColumnMetadata: ColumnMetadata<PostColumn>[] = [
     {
         accessorKey: "title",
-        header: "Title",
+        header: "제목",
+        type: "text",
     },
     {
         accessorKey: "content",
-        header: "Content",
-        cell: ({ row }) => {
-            const content = row.original.content || "";
-            return (
-                <span className="block max-w-[300px] truncate" title={content}>
-                    {content}
-                </span>
-            );
-        },
+        header: "내용",
+        type: "truncate",
+        maxWidth: 300,
     },
     {
         accessorKey: "author.name",
-        header: "Author",
-        cell: ({ row }) => row.original.author.name || "Unknown",
+        header: "작성자",
+        cell: (_, row) => row.author.name || "Unknown",
     },
     {
         accessorKey: "createdAt",
-        header: "Created At",
-        cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+        header: "생성일",
+        type: "date",
     },
     {
         accessorKey: "updatedAt",
-        header: "Updated At",
-        cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+        header: "수정일",
+        type: "date",
     },
-    {
+];
+
+function createActionsColumn(): ColumnDef<PostColumn> {
+    return {
         id: "actions",
         cell: ({ row }) => {
             const post = row.original;
@@ -73,7 +67,7 @@ export const columns: ColumnDef<PostColumn>[] = [
             const [isPending, startTransition] = useTransition();
 
             const onDelete = () => {
-                if (confirm("Are you sure you want to delete this post?")) {
+                if (confirm("정말 삭제하시겠습니까?")) {
                     startTransition(async () => {
                         await deletePost(post.id);
                         router.refresh();
@@ -85,39 +79,46 @@ export const columns: ColumnDef<PostColumn>[] = [
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">메뉴 열기</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>작업</DropdownMenuLabel>
                         <DropdownMenuItem asChild>
                             <Link href={`/admin/posts/${post.id}`}>
                                 <Pencil className="mr-2 h-4 w-4" />
-                                Edit
+                                수정
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={onDelete} className="text-destructive">
                             <Trash className="mr-2 h-4 w-4" />
-                            Delete
+                            삭제
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
         },
-    },
+    };
+}
+
+const columns: ColumnDef<PostColumn>[] = [
+    createIdColumn<PostColumn>(),
+    ...createColumns(postColumnMetadata),
+    createActionsColumn(),
 ];
 
 interface PostListProps {
     data: PostColumn[];
+    totalCount: number;
 }
 
-export function PostList({ data }: PostListProps) {
+export function PostList({ data, totalCount }: PostListProps) {
     return (
         <AdminDataTable
             columns={columns}
             data={data}
-            searchKey="title"
+            totalCount={totalCount}
         />
     );
 }

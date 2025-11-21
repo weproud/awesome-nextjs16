@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postSchema } from "./schemas";
 import { z } from "zod";
+import { PostFilter } from "./schemas/post-filter-schema";
+import { Prisma } from "@prisma/client";
 
 const ADMIN_PAGE_PATH = "/admin/posts";
 
@@ -17,12 +19,59 @@ async function checkAdmin() {
     return session.user;
 }
 
-export async function getPosts() {
+export async function getPostsWithFilter(filter: Partial<PostFilter>) {
     await checkAdmin();
-    return prisma.post.findMany({
-        orderBy: { createdAt: "desc" },
-        include: { author: { select: { name: true, email: true } } },
-    });
+
+    const where: Prisma.PostWhereInput = {};
+
+    if (filter.title) {
+        where.title = { contains: filter.title };
+    }
+
+    if (filter.content) {
+        where.content = { contains: filter.content };
+    }
+
+    if (filter.authorName) {
+        where.author = {
+            name: { contains: filter.authorName },
+        };
+    }
+
+    if (filter.createdFrom || filter.createdTo) {
+        where.createdAt = {};
+        if (filter.createdFrom) {
+            where.createdAt.gte = new Date(filter.createdFrom);
+        }
+        if (filter.createdTo) {
+            where.createdAt.lte = new Date(filter.createdTo);
+        }
+    }
+
+    const orderBy: Prisma.PostOrderByWithRelationInput = {};
+    if (filter.sortBy) {
+        orderBy[filter.sortBy as keyof Prisma.PostOrderByWithRelationInput] =
+            filter.sortOrder || "desc";
+    } else {
+        orderBy.createdAt = "desc";
+    }
+
+    const page = filter.page || 1;
+    const pageSize = filter.pageSize || 10;
+    const skip = (page - 1) * pageSize;
+
+    const [posts, totalCount] = await Promise.all([
+        prisma.post.findMany({
+            where,
+            orderBy,
+            skip,
+            take: pageSize,
+            include: { author: { select: { name: true, email: true } } },
+        }),
+        prisma.post.count({ where }),
+    ]);
+
+    return { posts, totalCount, page, pageSize };
 }
 
 export async function getPost(id: string) {

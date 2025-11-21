@@ -4,25 +4,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export function SignInView() {
     return (
-        <Card className="w-full max-w-md mx-auto">
-            <CardHeader>
-                <CardTitle>Sign In</CardTitle>
-                <CardDescription>
+        <div className="grid gap-6">
+            <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">Sign In</h1>
+                <p className="text-sm text-muted-foreground">
                     Sign in to your account to access all features.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form
-                    action={async () => {
-                        "use server";
-                        await signIn("google", { redirectTo: "/" });
-                    }}
-                >
-                    <Button type="submit" className="w-full">
-                        Sign in with Google
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+                </p>
+            </div>
+            <form
+                action={async () => {
+                    "use server";
+                    await signIn("google", { redirectTo: "/" });
+                }}
+            >
+                <Button type="submit" className="w-full">
+                    Sign in with Google
+                </Button>
+            </form>
+        </div>
     );
 }

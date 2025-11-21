@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight, Code2 } from "lucide-react";
 import Link from "next/link";
 
 export function HeroSection() {
@@ -17,8 +17,8 @@ export function HeroSection() {
                             transition={{ duration: 0.5 }}
                             className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl"
                         >
-                            Invest Smarter with
-                            <span className="text-primary block">Data-Driven Insights</span>
+                            Next.js 16으로
+                            <span className="text-primary block">최고의 웹 앱 구축하기</span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -26,7 +26,8 @@ export function HeroSection() {
                             transition={{ duration: 0.5, delay: 0.2 }}
                             className="mt-6 text-lg text-muted-foreground"
                         >
-                            Get real-time market analysis, expert stock picks, and powerful tools to grow your portfolio. Join thousands of investors making better decisions today.
+                            Turbopack, Server Components, 그리고 강력한 타입 안정성으로 더 빠르고 안정적인 웹 애플리케이션을 만들어보세요.
+                            최신 Next.js 16의 모든 기능을 활용한 프로젝트 템플릿입니다.
                         </motion.p>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -36,12 +37,12 @@ export function HeroSection() {
                         >
                             <Button size="lg" asChild>
                                 <Link href="/login">
-                                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                                    시작하기 <ArrowRight className="ml-2 h-4 w-4" />
                                 </Link>
                             </Button>
                             <Button variant="outline" size="lg" asChild>
                                 <Link href="/feed">
-                                    View Latest Insights
+                                    피드 둘러보기
                                 </Link>
                             </Button>
                         </motion.div>
@@ -60,27 +61,31 @@ export function HeroSection() {
                                 <div className="flex items-center justify-between border-b border-border pb-4">
                                     <div className="flex items-center gap-3">
                                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                            <TrendingUp className="h-6 w-6 text-primary" />
+                                            <Code2 className="h-6 w-6 text-primary" />
                                         </div>
                                         <div>
-                                            <p className="font-semibold">Market Sentiment</p>
-                                            <p className="text-sm text-green-500">+2.4% Today</p>
+                                            <p className="font-semibold">Next.js 16</p>
+                                            <p className="text-sm text-green-500">Turbopack 활성화</p>
                                         </div>
                                     </div>
-                                    <span className="text-sm font-medium bg-green-500/10 text-green-500 px-2 py-1 rounded">Bullish</span>
+                                    <span className="text-sm font-medium bg-green-500/10 text-green-500 px-2 py-1 rounded">최신</span>
                                 </div>
 
                                 <div className="space-y-4">
-                                    {[1, 2, 3].map((i) => (
+                                    {[
+                                        { label: "App Router", value: "✓" },
+                                        { label: "Server Components", value: "✓" },
+                                        { label: "TypeScript", value: "✓" }
+                                    ].map((item, i) => (
                                         <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50">
                                             <div className="flex items-center gap-3">
-                                                <div className="h-8 w-8 rounded bg-muted animate-pulse" />
+                                                <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center">
+                                                    <span className="text-primary font-bold">{item.value}</span>
+                                                </div>
                                                 <div className="space-y-1">
-                                                    <div className="h-4 w-24 rounded bg-muted animate-pulse" />
-                                                    <div className="h-3 w-16 rounded bg-muted animate-pulse" />
+                                                    <div className="font-medium">{item.label}</div>
                                                 </div>
                                             </div>
-                                            <div className="h-4 w-12 rounded bg-muted animate-pulse" />
                                         </div>
                                     ))}
                                 </div>

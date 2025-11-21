@@ -20,7 +20,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 
     return (
         <div className="flex-1 space-y-4 p-8 pt-6">
-            <AdminPageHeader heading="Edit Post" text="Edit post details" />
+            <AdminPageHeader heading="게시물 수정" />
             <AdminFormWrapper title="Post Details">
                 <PostForm initialData={post} />
             </AdminFormWrapper>

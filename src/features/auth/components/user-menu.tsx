@@ -36,6 +36,14 @@ export function UserMenu({ user }: UserMenuProps) {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {user.role === "ADMIN" && (
+                    <>
+                        <DropdownMenuItem asChild>
+                            <a href="/admin">Admin Page</a>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                    </>
+                )}
                 <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                     <form
                         action={async () => {
@@ -50,6 +58,6 @@ export function UserMenu({ user }: UserMenuProps) {
                     </form>
                 </div>
             </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
     );
 }

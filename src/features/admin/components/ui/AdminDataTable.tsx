@@ -36,12 +36,14 @@ interface AdminDataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     searchKey?: string;
+    displayColumns?: string[];
 }
 
 export function AdminDataTable<TData, TValue>({
     columns,
     data,
     searchKey,
+    displayColumns,
 }: AdminDataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -51,9 +53,17 @@ export function AdminDataTable<TData, TValue>({
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
+    const filteredColumns = React.useMemo(() => {
+        if (!displayColumns) return columns;
+        return columns.filter((column) => {
+            const id = column.id || (column as any).accessorKey;
+            return displayColumns.includes(id);
+        });
+    }, [columns, displayColumns]);
+
     const table = useReactTable({
         data,
-        columns,
+        columns: filteredColumns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),

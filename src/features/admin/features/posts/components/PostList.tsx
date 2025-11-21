@@ -19,17 +19,36 @@ import { useTransition } from "react";
 export type PostColumn = {
     id: string;
     title: string;
+    content: string | null;
     author: {
         name: string | null;
         email: string | null;
     };
     createdAt: Date;
+    updatedAt: Date;
 };
 
 export const columns: ColumnDef<PostColumn>[] = [
     {
+        accessorKey: "id",
+        header: "ID",
+        cell: ({ row }) => <span className="font-mono text-xs">{row.original.id.slice(0, 8)}...</span>,
+    },
+    {
         accessorKey: "title",
         header: "Title",
+    },
+    {
+        accessorKey: "content",
+        header: "Content",
+        cell: ({ row }) => {
+            const content = row.original.content || "";
+            return (
+                <span className="block max-w-[300px] truncate" title={content}>
+                    {content}
+                </span>
+            );
+        },
     },
     {
         accessorKey: "author.name",
@@ -40,6 +59,11 @@ export const columns: ColumnDef<PostColumn>[] = [
         accessorKey: "createdAt",
         header: "Created At",
         cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+    },
+    {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
     },
     {
         id: "actions",
@@ -89,5 +113,11 @@ interface PostListProps {
 }
 
 export function PostList({ data }: PostListProps) {
-    return <AdminDataTable columns={columns} data={data} searchKey="title" />;
+    return (
+        <AdminDataTable
+            columns={columns}
+            data={data}
+            searchKey="title"
+        />
+    );
 }
